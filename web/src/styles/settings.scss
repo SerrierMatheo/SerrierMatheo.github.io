@@ -1,0 +1,31 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+.v-field--variant-filled .v-field__overlay {
+  background-color: transparent;
+  opacity: 1;
+}
+
+.v-btn--active > .v-btn__overlay {
+  opacity: 0;
+}
+
+.v-btn:hover > .v-btn__overlay {
+  opacity: 0;
+}
+
+.v-btn > .v-ripple__container{
+  opacity: 0;
+}
+
+.v-btn--active > .v-btn__underlay {
+  opacity: 0;
+}

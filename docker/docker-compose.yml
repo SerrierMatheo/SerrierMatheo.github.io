@@ -1,0 +1,181 @@
+version: '3.5'
+name: 'forum-emploi'
+networks:
+  forum.net:
+    driver: bridge
+services:
+
+
+  #
+  # service administration des bases sql
+  #
+  adminer:
+    image: adminer
+    command: php -S 0.0.0.0:8080 -t /var/www/html
+    ports:
+      - '8081:8080' 
+    networks:
+      - forum.net
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: forum.env
+    ports:
+      #- '3320:80'
+      - '2082:8081'
+    volumes:
+      - ../api/gateway:/var/www/
+      - ../api/gateway/public:/var/www/html
+    working_dir: /var/www
+    networks:
+      - forum.net
+    command: >
+      bash -c "composer install && composer update && apache2-foreground"
+
+  forum.db:
+    image: 'mariadb:latest'
+    restart: always
+    command: '--default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci'
+    env_file:
+      - forum.env
+    environment:
+      - TZ=Europe/Paris
+    ports:
+      - '3306:3306'
+    networks:
+      - forum.net
+    volumes:
+      - ../api/DB:/var/sql
+      - ../api/DB:/docker-entrypoint-initdb.d
+
+  api.users:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/users.forum:/usr/app
+    ports:
+      - '4001:4000'
+    networks:
+      - forum.net
+    env_file:
+      - users.env
+    depends_on:
+      - forum.db
+
+  api.profiles:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/profiles.forum:/usr/app
+      - ../api/profiles.forum/uploads:/usr/app/uploads # Montez les répertoires d'upload
+    ports:
+      - '4002:4001'
+    networks:
+      - forum.net
+    env_file:
+      - profiles.env
+    depends_on:
+      - forum.db
+
+  api.forum:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/forum.forum:/usr/app
+    ports:
+      - '4003:4002'
+    networks:
+      - forum.net
+    env_file:
+      - forum.env
+    depends_on:
+      - forum.db
+
+  api.rdvs:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/rdvs.forum:/usr/app
+    ports:
+      - '4004:4003'
+    networks:
+      - forum.net
+    env_file:
+      - rdv.env
+    depends_on:
+      - forum.db
+
+  api.eval:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/eval.forum:/usr/app
+    ports:
+      - '4005:4004'
+    networks:
+      - forum.net
+    env_file:
+      - eval.env
+    depends_on:
+      - forum.db
+
+  api.config:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/config.forum:/usr/app
+    ports:
+      - '4006:4005'
+    networks:
+      - forum.net
+    env_file:
+      - config.env
+    depends_on:
+      - forum.db
+
+  api.auth:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/auth.forum:/usr/app
+    ports:
+      - '4007:4006'
+    networks:
+      - forum.net
+    env_file:
+      - auth.env
+    depends_on:
+      - forum.db
+
+
+  api.statistics:
+    image: node:alpine
+    working_dir: /usr/app
+    command: sh -c "npm i && npm run dev" #for development only
+    #command: sh -c "npm i && npm start" #for production only
+    volumes:
+      - ../api/statistics.forum:/usr/app
+    ports:
+      - '4008:4007'
+    networks:
+      - forum.net
+    env_file:
+      - statistics.env
+    depends_on:
+      - forum.db

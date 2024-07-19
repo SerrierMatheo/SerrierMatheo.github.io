@@ -1,0 +1,85 @@
+-- Insertion de données dans la table `secteurs_activites`
+INSERT INTO `secteurs_activites` (`name`) VALUES
+('Informatique'),
+('Finance'),
+('Santé'),
+('Éducation');
+
+-- Insertion de données dans la table `companies`
+INSERT INTO `companies` (`name`, `description`, `logo`, `color`, `background`, `video`, `country`, `foundation_date`, `employees`, `revenue`, `website`, `secteur_activite_id`) VALUES
+('Tech Innov', 'Entreprise spécialisée en développement de logiciels.', NULL, '#FF5733', NULL, NULL, 'France', 2010, 150, 5000000.00, 'www.techinnov.fr', 1),
+('Finance Plus', 'Société de conseil en finance et investissement.', NULL, '#33FF57', NULL, NULL, 'France', 2005, 300, 15000000.00, 'www.financeplus.fr', 2);
+
+-- Insertion de données dans la table `users`
+INSERT INTO `users` (`username`, `type`, `cgu`, `picture`, `phone`, `name`, `firstname`, `mail`) VALUES
+('jdoe', 'participant', 'oui', NULL, '0612345678', 'Doe', 'John', 'jdoe@example.com'),
+('asmith', 'intervenant', 'oui', NULL, '0698765432', 'Smith', 'Anna', 'asmith@example.com');
+
+-- Insertion de données dans la table `formations`
+INSERT INTO `formations` (`nom`, `date_agenda`) VALUES
+('Développement Web', '2024-08-01 10:00:00'),
+('Gestion de projet', '2024-09-01 14:00:00');
+
+-- Insertion de données dans la table `participants_users`
+INSERT INTO `participants_users` (`id_user`, `formation_id`) VALUES
+(1, 1);
+
+-- Insertion de données dans la table `intervenants_users`
+INSERT INTO `intervenants_users` (`id_user`, `company_id`, `title`, `password`) VALUES
+(2, 1, 'Directeur Technique', 'password123');
+
+-- Insertion de données dans la table `tags`
+INSERT INTO `tags` (`tagname`) VALUES
+('Innovation'),
+('Finance durable');
+
+-- Insertion de données dans la table `company_tags`
+INSERT INTO `company_tags` (`tag_id`, `company_id`) VALUES
+(1, 1),
+(2, 2);
+
+-- Insertion de données dans la table `offers`
+INSERT INTO `offers` (`company_id`, `file`, `title`, `type`) VALUES
+(1, 'offre_dev.pdf', 'Développeur Web', 'emploi'),
+(2, 'offre_analyste.pdf', 'Analyste Financier', 'emploi');
+
+-- Insertion de données dans la table `pictures`
+INSERT INTO `pictures` (`company_id`, `href`, `alt`) VALUES
+(1, 'logo_tech_innov.png', 'Logo Tech Innov'),
+(2, 'logo_finance_plus.png', 'Logo Finance Plus');
+
+-- Insertion de données dans la table `sections`
+INSERT INTO `sections` (`company_id`, `picture_id`, `text`) VALUES
+(1, 1, 'Bienvenue chez Tech Innov, où l\'innovation est au cœur de notre métier.'),
+(2, 2, 'Bienvenue chez Finance Plus, votre partenaire en solutions financières.');
+
+-- Insertion de données dans la table `slots`
+INSERT INTO `slots` (`company_id`, `start`, `duration`) VALUES
+(1, '2024-07-10 09:00:00', 20),
+(2, '2024-07-10 10:00:00', 20);
+
+-- Insertion de données dans la table `rdvs`
+INSERT INTO `rdvs` (`user_id`, `slot_id`) VALUES
+(1, 1);
+
+-- Insertion de données dans la table `questions`
+INSERT INTO `questions` (`question`) VALUES
+('Pouvez-vous décrire votre expérience précédente ?'),
+('Quels sont vos points forts et vos faiblesses ?');
+
+-- Insertion de données dans la table `evaluations`
+INSERT INTO `evaluations` (`user_id`, `company_id`, `rem`) VALUES
+(1, 1, 'Bonne prestation, candidat motivé et compétent.');
+
+-- Insertion de données dans la table `questions_evaluations`
+INSERT INTO `questions_evaluations` (`eval_id`, `question_id`, `grade`) VALUES
+(1, 1, 'bien'),
+(1, 2, 'très bien');
+
+-- Insertion de données dans la table `logs`
+INSERT INTO `logs` (`user_id`, `action_id`, `api`, `action`, `timestamp`) VALUES
+(1, 1, 'API_USERS', 'CREATE', CURRENT_TIMESTAMP);
+
+-- Insertion dans la table 'configs'
+INSERT INTO `configs` (`key`, `value`) VALUES
+('date_forum', '2024-10-20T08:00:00');
